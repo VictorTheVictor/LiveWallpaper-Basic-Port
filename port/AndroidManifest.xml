@@ -20,5 +20,15 @@
 			</intent-filter>
 			<meta-data android:name="android.service.wallpaper" android:resource="@xml/polar_clock" />
 		</service>
+		<service
+			android:name="com.android.wallpaper.grass.GrassWallpaper"
+			android:label="@string/wallpaper_grass"
+			android:exported="true"
+			android:permission="android.permission.BIND_WALLPAPER">
+			<intent-filter>
+				<action android:name="android.service.wallpaper.WallpaperService" />
+			</intent-filter>
+			<meta-data android:name="android.service.wallpaper" android:resource="@xml/grass" />
+		</service>
 	</application>
 </manifest>

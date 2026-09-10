@@ -195,14 +195,8 @@ public class PolarClockWallpaper extends WallpaperService {
             final int[] colors = mColors;
             final int count = colors.length;
             float invCount = 1.0f / (float) COLORS_CACHE_COUNT;
-			final float[] hsv = new float[3];
-			
-			hsv[1] = mSaturation;
-			hsv[2] = mBrightness;
-			
             for (int i = 0; i < count; i++) {
-				hsv[0] = i * invCount * 360.0f;
-				colors[i] = Color.HSVToColor(hsv);
+                colors[i] = Color.HSVToColor(new float[] { i * invCount * 360.0f, mSaturation, mBrightness });
             }
         }
 

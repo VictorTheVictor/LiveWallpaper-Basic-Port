@@ -29,8 +29,8 @@ android
 		applicationId 'org.example.classicwallpapers.basic'
 		minSdkVersion 18
 		targetSdkVersion 29
-		versionCode 1
-		versionName '0.1-polarclock'
+		versionCode 2
+		versionName '0.2-grass'
 	}
 
 	sourceSets
@@ -38,8 +38,9 @@ android
 		main
 		{
 			manifest.srcFile 'port/AndroidManifest.xml'
-			java.srcDirs = ['src/com/android/wallpaper/polarclock']
+			java.srcDirs = ['src/com/android/wallpaper/polarclock', 'port/src']
 			res.srcDirs = ['res']
+			// RenderScript graphics wallpapers are preserved but not built in this milestone.
 			renderscript.srcDirs = []
 		}
 	}
