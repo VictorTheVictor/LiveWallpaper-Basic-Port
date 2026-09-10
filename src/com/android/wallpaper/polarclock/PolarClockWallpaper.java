@@ -33,7 +33,6 @@ import android.content.res.XmlResourceParser;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.text.format.Time;
-import android.util.MathUtils;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -196,8 +195,14 @@ public class PolarClockWallpaper extends WallpaperService {
             final int[] colors = mColors;
             final int count = colors.length;
             float invCount = 1.0f / (float) COLORS_CACHE_COUNT;
+			final float[] hsv = new float[3];
+			
+			hsv[1] = mSaturation;
+			hsv[2] = mBrightness;
+			
             for (int i = 0; i < count; i++) {
-                colors[i] = Color.HSBtoColor(i * invCount, mSaturation, mBrightness);
+				hsv[0] = i * invCount * 360.0f;
+				colors[i] = Color.HSVToColor(hsv);
             }
         }
 
@@ -483,7 +488,7 @@ public class PolarClockWallpaper extends WallpaperService {
 
                     c.drawColor(mPalette.getBackgroundColor());
 
-                    c.translate(s + MathUtils.lerp(s, -s, mOffsetX), t);
+                    c.translate(s + (s + (-s - s) * mOffsetX), t);
                     c.rotate(-90.0f);
                     if (height < width) {
                         c.scale(0.9f, 0.9f);

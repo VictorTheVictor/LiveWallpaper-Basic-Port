@@ -1,0 +1,52 @@
+buildscript
+{
+	repositories
+	{
+		google()
+		mavenCentral()
+	}
+	dependencies
+	{
+		classpath 'com.android.tools.build:gradle:4.1.3'
+	}
+}
+
+apply plugin: 'com.android.application'
+
+repositories
+{
+	google()
+	mavenCentral()
+}
+
+android
+{
+	compileSdkVersion 29
+	buildToolsVersion '29.0.3'
+
+	defaultConfig
+	{
+		applicationId 'org.example.classicwallpapers.basic'
+		minSdkVersion 18
+		targetSdkVersion 29
+		versionCode 1
+		versionName '0.1-polarclock'
+	}
+
+	sourceSets
+	{
+		main
+		{
+			manifest.srcFile 'port/AndroidManifest.xml'
+			java.srcDirs = ['src/com/android/wallpaper/polarclock']
+			res.srcDirs = ['res']
+			renderscript.srcDirs = []
+		}
+	}
+
+	compileOptions
+	{
+		sourceCompatibility JavaVersion.VERSION_1_8
+		targetCompatibility JavaVersion.VERSION_1_8
+	}
+}

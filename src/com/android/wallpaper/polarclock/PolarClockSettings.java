@@ -20,9 +20,9 @@ import com.android.wallpaper.R;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.service.wallpaper.WallpaperSettingsActivity;
+import android.preference.PreferenceActivity;
 
-public class PolarClockSettings extends WallpaperSettingsActivity
+public class PolarClockSettings extends PreferenceActivity
     implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override

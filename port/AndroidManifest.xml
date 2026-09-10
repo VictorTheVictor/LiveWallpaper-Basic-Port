@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	package="com.android.wallpaper">
+	<uses-feature android:name="android.software.live_wallpaper" android:required="true" />
+	<application
+		android:label="@string/wallpapers"
+		android:icon="@drawable/ic_launcher_wallpaper"
+		android:theme="@android:style/Theme.Holo">
+		<activity
+			android:name="com.android.wallpaper.polarclock.PolarClockSettings"
+			android:label="@string/clock_settings"
+			android:exported="true" />
+		<service
+			android:name="com.android.wallpaper.polarclock.PolarClockWallpaper"
+			android:label="@string/wallpaper_clock"
+			android:exported="true"
+			android:permission="android.permission.BIND_WALLPAPER">
+			<intent-filter>
+				<action android:name="android.service.wallpaper.WallpaperService" />
+			</intent-filter>
+			<meta-data android:name="android.service.wallpaper" android:resource="@xml/polar_clock" />
+		</service>
+	</application>
+</manifest>
