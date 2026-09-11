@@ -149,7 +149,9 @@ public final class GalaxyRenderer implements GLSurfaceView.Renderer
 		glActiveTexture(GL_TEXTURE0);
 		glDisable(GL_BLEND);
 		// Original background: two horizontal repetitions, vertically reversed.
-		drawQuad(space, identity, -1f, -1f, 1f, 1f, 2f, false);
+		float repeatX = width / 512f;
+		float repeatY = height / 512f;
+		drawQuad(space,identity,-1f,-1f,1f,1f,repeatX,repeatY,false);
 		float angle = preview ? 0f : (offset * 2f - 1f) * 50f;
 		Matrix.setIdentityM(model, 0);
 		Matrix.translateM(model, 0, 0f, 0f, 10f - 6f * Math.abs(angle) / 50f);
@@ -180,8 +182,7 @@ public final class GalaxyRenderer implements GLSurfaceView.Renderer
 		drawQuad(light, projection, -scale * 1.05f, -scale, scale * 1.15f, scale, 1f, true);
 	}
 
-	private void drawQuad(int texture, float[] matrix, float left, float bottom,
-		float right, float top, float repeat, boolean flip)
+	private void drawQuad(int texture, float[] matrix, float left, float bottom, float right, float top, float repeat, boolean flip)
 	{
 		float lowV = flip ? 1f : 0f, highV = flip ? 0f : 1f;
 		quad.position(0);
@@ -196,6 +197,43 @@ public final class GalaxyRenderer implements GLSurfaceView.Renderer
 		attribute(quadPosition, 2, 16, quad, 0);
 		attribute(quadUV, 2, 16, quad, 2);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+		glDisableVertexAttribArray(quadPosition);
+		glDisableVertexAttribArray(quadUV);
+	}
+
+	private void drawQuad(int texture, float[] matrix, float left, float bottom, float right, float top, float repeatX, float repeatY, boolean flip)
+	{
+		float lowV;
+		float highV;
+
+		if (flip)
+		{
+			lowV = repeatY;
+			highV = 0f;
+		}
+		else
+		{
+			lowV = 0f;
+			highV = repeatY;
+		}
+
+		quad.position(0);
+
+		quad.put(left).put(bottom).put(0f).put(lowV);
+		quad.put(right).put(bottom).put(repeatX).put(lowV);
+		quad.put(left).put(top).put(0f).put(highV);
+		quad.put(right).put(top).put(repeatX).put(highV);
+
+		glUseProgram(quadProgram);
+		glUniformMatrix4fv(quadMatrix, 1, false, matrix, 0);
+		glUniform1i(quadTexture, 0);
+		glBindTexture(GL_TEXTURE_2D, texture);
+
+		attribute(quadPosition, 2, 16, quad, 0);
+		attribute(quadUV, 2, 16, quad, 2);
+
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
 		glDisableVertexAttribArray(quadPosition);
 		glDisableVertexAttribArray(quadUV);
 	}
