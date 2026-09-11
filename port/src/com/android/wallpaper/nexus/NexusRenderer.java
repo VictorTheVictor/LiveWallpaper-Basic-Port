@@ -164,7 +164,9 @@ public final class NexusRenderer implements GLSurfaceView.Renderer
 		glUniform1i(sampler, 0);
 		glDisable(GL_BLEND);
 		glUniform4f(tint, 1f, 1f, 1f, 1f);
-		draw(background, 0f, 0f, width * 2f, height, 0);
+		float backgroundHeight = height;
+		float backgroundWidth = backgroundHeight * (960f / 800f);
+		draw(background, 0f, 0f, backgroundWidth, backgroundHeight, 0);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		for (Pulse p : normal) drawPulse(p, false);
