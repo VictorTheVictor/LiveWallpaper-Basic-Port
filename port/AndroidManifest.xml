@@ -41,5 +41,25 @@
 			</intent-filter>
 			<meta-data android:name="android.service.wallpaper" android:resource="@xml/galaxy" />
 		</service>
+		<service
+			android:name="com.android.wallpaper.nexus.NexusWallpaper"
+			android:label="@string/wallpaper_nexus"
+			android:exported="true"
+			android:permission="android.permission.BIND_WALLPAPER">
+			<intent-filter>
+				<action android:name="android.service.wallpaper.WallpaperService" />
+			</intent-filter>
+			<meta-data android:name="android.service.wallpaper" android:resource="@xml/nexus" />
+		</service>
+		<service
+			android:name="com.android.wallpaper.fall.FallWallpaper"
+			android:label="@string/wallpaper_fall"
+			android:exported="true"
+			android:permission="android.permission.BIND_WALLPAPER">
+			<intent-filter>
+				<action android:name="android.service.wallpaper.WallpaperService" />
+			</intent-filter>
+			<meta-data android:name="android.service.wallpaper" android:resource="@xml/fall" />
+		</service>
 	</application>
 </manifest>
