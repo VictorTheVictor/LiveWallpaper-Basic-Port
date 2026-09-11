@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.android.wallpaper">
 	<uses-feature android:name="android.software.live_wallpaper" android:required="true" />
+	<uses-feature android:glEsVersion="0x00020000" android:required="true" />
 	<application
 		android:label="@string/wallpapers"
 		android:icon="@drawable/ic_launcher_wallpaper"
@@ -29,6 +30,16 @@
 				<action android:name="android.service.wallpaper.WallpaperService" />
 			</intent-filter>
 			<meta-data android:name="android.service.wallpaper" android:resource="@xml/grass" />
+		</service>
+		<service
+			android:name="com.android.wallpaper.galaxy.GalaxyWallpaper"
+			android:label="@string/wallpaper_galaxy"
+			android:exported="true"
+			android:permission="android.permission.BIND_WALLPAPER">
+			<intent-filter>
+				<action android:name="android.service.wallpaper.WallpaperService" />
+			</intent-filter>
+			<meta-data android:name="android.service.wallpaper" android:resource="@xml/galaxy" />
 		</service>
 	</application>
 </manifest>
