@@ -142,8 +142,8 @@ public final class GalaxyRenderer implements GLSurfaceView.Renderer
 	@Override
 	public void onDrawFrame(GL10 unused)
 	{
-		long now = SystemClock.uptimeMillis();
-		float step = lastFrame == 0 ? 1f : Math.min(3f, (now - lastFrame) / 45f);
+		long now = System.nanoTime();
+		float step = lastFrame == 0 ? 1f : Math.min(3f, (now - lastFrame) / 45000000f);
 		lastFrame = now;
 		glClear(GL_COLOR_BUFFER_BIT);
 		glActiveTexture(GL_TEXTURE0);

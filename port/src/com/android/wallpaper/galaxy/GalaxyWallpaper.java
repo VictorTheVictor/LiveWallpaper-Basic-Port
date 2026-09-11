@@ -26,6 +26,7 @@ public class GalaxyWallpaper extends WallpaperService
 	{
 		private WallpaperView view;
 		private GalaxyRenderer renderer;
+		private com.android.wallpaper.common.WallpaperFrames frames;
 
 		@Override
 		public void onCreate(SurfaceHolder holder)
@@ -37,31 +38,18 @@ public class GalaxyWallpaper extends WallpaperService
 			view.setEGLConfigChooser(8, 8, 8, 0, 0, 0);
 			view.setRenderer(renderer);
 			view.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+			frames = new com.android.wallpaper.common.WallpaperFrames(GalaxyWallpaper.this, holder, view);
 		}
-
-		private final android.os.Handler handler = new android.os.Handler(android.os.Looper.getMainLooper());
-		private final Runnable frame = new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				if (view != null && isVisible())
-				{
-					view.requestRender();
-					handler.postDelayed(this, 45);
-				}
-			}
-		};
 
 		@Override
 		public void onVisibilityChanged(boolean visible)
 		{
-			handler.removeCallbacks(frame);
+			if (frames != null) frames.stop();
 			if (view == null) return;
 			if (visible)
 			{
 				view.onResume();
-				handler.post(frame);
+				frames.start();
 			}
 			else
 			{
@@ -81,11 +69,14 @@ public class GalaxyWallpaper extends WallpaperService
 		{
 			super.onSurfaceChanged(holder, format, width, height);
 			view.surfaceChanged(holder, format, width, height);
+			if (isVisible()) frames.start();
+			frames.surfaceChanged();
 		}
 
 		@Override
 		public void onSurfaceDestroyed(SurfaceHolder holder)
 		{
+			if (frames != null) frames.stop();
 			if (view != null) view.surfaceDestroyed(holder);
 			super.onSurfaceDestroyed(holder);
 		}
@@ -99,7 +90,7 @@ public class GalaxyWallpaper extends WallpaperService
 		@Override
 		public void onDestroy()
 		{
-			handler.removeCallbacks(frame);
+			if (frames != null) frames.stop();
 			if (view != null)
 			{
 				view.shutdown();

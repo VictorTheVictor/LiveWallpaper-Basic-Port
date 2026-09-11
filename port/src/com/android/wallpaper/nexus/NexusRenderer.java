@@ -152,8 +152,8 @@ public final class NexusRenderer implements GLSurfaceView.Renderer
 	@Override
 	public void onDrawFrame(GL10 unused)
 	{
-		long now = SystemClock.uptimeMillis();
-		clock += lastFrame == 0 ? 0 : Math.min(100L, now - lastFrame);
+		long now = System.nanoTime();
+		clock += lastFrame == 0 ? 0 : Math.min(100.0, (now - lastFrame) / 1000000.0);
 		lastFrame = now;
 		glClear(GL_COLOR_BUFFER_BIT);
 		Matrix.orthoM(projection, 0, 0f, width, height, 0f, -1f, 1f);

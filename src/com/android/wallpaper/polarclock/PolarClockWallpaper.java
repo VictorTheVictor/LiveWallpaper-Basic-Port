@@ -318,6 +318,7 @@ public class PolarClockWallpaper extends WallpaperService {
             }
         };
         private boolean mVisible;
+		private com.android.wallpaper.common.WallpaperFrames mFrames;
 
         ClockEngine() {
             XmlResourceParser xrp = getResources().getXml(R.xml.polar_clock_palettes);
@@ -348,6 +349,7 @@ public class PolarClockWallpaper extends WallpaperService {
         @Override
         public void onCreate(SurfaceHolder surfaceHolder) {
             super.onCreate(surfaceHolder);
+			mFrames = new com.android.wallpaper.common.WallpaperFrames(PolarClockWallpaper.this, surfaceHolder, mDrawClock);
 
             mPrefs = PolarClockWallpaper.this.getSharedPreferences(SHARED_PREFS_NAME, 0);
             mPrefs.registerOnSharedPreferenceChangeListener(this);
@@ -377,6 +379,7 @@ public class PolarClockWallpaper extends WallpaperService {
                 unregisterReceiver(mWatcher);
             }
             mHandler.removeCallbacks(mDrawClock);
+			if (mFrames != null) mFrames.stop();
         }
 
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
@@ -424,6 +427,7 @@ public class PolarClockWallpaper extends WallpaperService {
                     unregisterReceiver(mWatcher);
                 }
                 mHandler.removeCallbacks(mDrawClock);
+			if (mFrames != null) mFrames.stop();
             }
             drawFrame();
         }
@@ -431,6 +435,7 @@ public class PolarClockWallpaper extends WallpaperService {
         @Override
         public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
             super.onSurfaceChanged(holder, format, width, height);
+			if (mFrames != null) mFrames.surfaceChanged();
             drawFrame();
         }
 
@@ -444,6 +449,7 @@ public class PolarClockWallpaper extends WallpaperService {
             super.onSurfaceDestroyed(holder);
             mVisible = false;
             mHandler.removeCallbacks(mDrawClock);
+			if (mFrames != null) mFrames.stop();
         }
 
         @Override
@@ -567,10 +573,12 @@ public class PolarClockWallpaper extends WallpaperService {
             }
 
             mHandler.removeCallbacks(mDrawClock);
+			if (!mVisible && mFrames != null) mFrames.stop();
             if (mVisible) {
                 if (mShowSeconds) {
-                    mHandler.postDelayed(mDrawClock, 1000 / 25);
+                    mFrames.start();
                 } else {
+                    mFrames.stop();
                     // If we aren't showing seconds, we don't need to update
                     // nearly as often.
                     mHandler.postDelayed(mDrawClock, 2000);

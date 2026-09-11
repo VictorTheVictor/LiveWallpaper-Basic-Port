@@ -42,6 +42,7 @@ public final class FallRenderer implements GLSurfaceView.Renderer
 	private int leafPosition, leafUV, leafScreen, leafTint, leafTexture;
 	private float width, height, worldWidth, unitsPerPixel;
 	private long lastFrame;
+	private float ambientElapsed;
 	public volatile float offset;
 
 	private static final String WATER_VERTEX =
@@ -72,8 +73,10 @@ public final class FallRenderer implements GLSurfaceView.Renderer
 	FallRenderer(Resources resources, boolean preview)
 	{
 		this.resources = resources;
-		for (int i = 0; i < leaves.length; i++) leaves[i] = new Leaf();
-		for (int i = 0; i < drops.length; i++) drops[i] = new Drop();
+		for (int i = 0; i < leaves.length; i++)
+			leaves[i] = new Leaf();
+		for (int i = 0; i < drops.length; i++)
+			drops[i] = new Drop();
 	}
 
 	@Override
@@ -188,8 +191,8 @@ public final class FallRenderer implements GLSurfaceView.Renderer
 	@Override
 	public void onDrawFrame(GL10 unused)
 	{
-		long now = SystemClock.uptimeMillis();
-		float dt = lastFrame == 0 ? 0.05f : Math.min(0.2f, (now - lastFrame) * 0.001f);
+		long now = System.nanoTime();
+		float dt = lastFrame == 0 ? 0.05f : Math.min(0.2f, (now - lastFrame) * 0.000000001f);
 		lastFrame = now;
 		for (Leaf leaf : leaves)
 		{
@@ -217,13 +220,18 @@ public final class FallRenderer implements GLSurfaceView.Renderer
 				reset(leaf, true);
 			}
 		}
-		for (Drop d : drops)
+		ambientElapsed += dt;
+		if (ambientElapsed >= 0.05f)
 		{
-			if (d.strength / d.spread < 0.005f)
+			ambientElapsed %= 0.05f;
+			for (Drop d : drops)
 			{
-				Leaf leaf = leaves[random.nextInt(leaves.length)];
-				addDrop(leaf.x, leaf.y, 0.1f + random.nextFloat() * 0.3f);
-				break;
+				if (d.strength / d.spread < 0.005f)
+				{
+					Leaf leaf = leaves[random.nextInt(leaves.length)];
+					addDrop(leaf.x, leaf.y, 0.1f + random.nextFloat() * 0.3f);
+					break;
+				}
 			}
 		}
 		for (int i = 0; i < drops.length; i++)
