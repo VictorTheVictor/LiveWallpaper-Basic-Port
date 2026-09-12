@@ -110,7 +110,8 @@ public final class FallRenderer implements GLSurfaceView.Renderer
 		unitsPerPixel = 2f / Math.min(w, h);
 		width = w * unitsPerPixel;
 		height = h * unitsPerPixel;
-		worldWidth = h > w ? width * 2f : width;
+		//worldWidth = h > w ? width * 2f : width;
+		worldWidth = height * (960f / 800f);
 		int columns = 50, rows = Math.max(2, Math.min(200, (int) Math.ceil(50f * h / w)));
 		mesh = buffer((columns + 1) * (rows + 1) * 2);
 		for (int y = 0; y <= rows; y++)
